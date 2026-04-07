@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Setup MFA</title>
+
+<style>
+/* Global Navbar Sticky & Font */
+body { font-family: 'Inter', sans-serif !important; }
+.navbar, .header { 
+    position: fixed !important; 
+    top: 0 !important; 
+    left: 0 !important;
+    width: 100vw !important;
+    box-sizing: border-box !important;
+    z-index: 1000 !important; 
+}
+/* Navbar Link Animation */
+.navbar a:not(.logo), .nav-links a, .header a:not(.logo), .navbar span a {
+    position: relative;
+    text-decoration: none;
+    padding-bottom: 5px;
+    color: #008080 !important;
+    margin-left: 15px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+}
+.navbar a:not(.logo)::after, .nav-links a::after, .header a:not(.logo)::after, .navbar span a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    bottom: 0;
+    right: 0;
+    background: #008080;
+    transition: width 0.3s ease;
+}
+.navbar a:not(.logo):hover::after, .nav-links a:hover::after, .header a:not(.logo):hover::after, .navbar span a:hover::after {
+    width: 100%;
+    left: 0;
+}
+</style>
+</head>
+
+<body>
+    <h1>Setup Multi-Factor Authentication</h1>
+    
+    <div>
+        <h2>Step 1: Install Google Authenticator</h2>
+        <p>If you haven't already, install Google Authenticator on your mobile device.</p>
+    </div>
+    
+    <div>
+        <h2>Step 2: Scan QR Code</h2>
+        <p>Open Google Authenticator and scan this QR code:</p>
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+    </div>
+    
+    <div>
+        <h2>Alternative: Manual Entry</h2>
+        <p>If you can't scan the QR code, enter this code manually:</p>
+        <code>{{ secret }}</code>
+    </div>
+    
+    <div>
+        <p>Once you've set up your authenticator, you can proceed to <a href="{{ url_for('login') }}">login</a>.</p>
+    </div>
+</body>
+</html>

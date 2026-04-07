@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepfake Detection</title>
+    <link rel="stylesheet" href="/static/">
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --accent-blue: #008080;
+            --background-gray: #f5f5f5;
+            --white: #ffffff;
+            --light-gray: #e0e0e0;
+            --success-green: #87b4c3;
+            --error-red: #87b4c3;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0d1117;
+            /* Sleek dark mode background */
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header-card {
+            background-color: #161b22;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        h1 {
+            color: #58a6ff;
+            font-size: 32px;
+            margin-bottom: 10px;
+            margin-top: 0;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            color: #c9d1d9;
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="file"] {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(46, 160, 67, 0.3);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 160, 67, 0.5);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-card {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .result.real {
+            color: #3fb950;
+        }
+
+        .result.fake {
+            color: #f85149;
+        }
+
+        .confidence-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px auto;
+            border: 6px solid var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .image-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .image-box {
+            text-align: center;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .image-box img:hover {
+            transform: scale(1.02);
+        }
+
+        .metadata-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .metadata-table th,
+        .metadata-table td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .metadata-table th {
+            color: #8b949e;
+            font-weight: 500;
+            width: 40%;
+        }
+
+        .metadata-table td {
+            color: #c9d1d9;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .metadata-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #21262d;
+            color: #c9d1d9;
+            padding: 10px 20px;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #30363d;
+            color: #ffffff;
+        }
+
+        /* Detailed Breakdown Styles */
+        .breakdown-section {
+            grid-column: 1 / -1;
+            /* Span full width of grid */
+            margin-top: 20px;
+        }
+
+        .breakdown-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .breakdown-card {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .breakdown-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .breakdown-card-title {
+            color: #c9d1d9;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .breakdown-score {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .breakdown-score.real {
+            color: #3fb950;
+        }
+
+        .breakdown-score.fake {
+            color: #f85149;
+        }
+
+        .breakdown-text {
+            color: #8b949e;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <!-- Header & Upload -->
+        <div class="header-card">
+            <h1>Multimodal Deepfake Analysis</h1>
+            <p style="color: #8b949e; margin-bottom: 25px;">Upload high-detail media for Deep Learning inference and
+                comprehensive forensic metadata evaluation.</p>
+
+            <form action="/detect" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" name="file" accept=".jpg,.jpeg,.png,.mp4,.avi" required>
+                    <button type="submit">Analyze Media</button>
+                    <a href="/" class="btn">Back to Home</a>
+                </div>
+            </form>
+        </div>
+
+        
+        <div class="dashboard-grid">
+
+            <!-- Column 1: Visual Forensic Evidence -->
+            <div class="card">
+                <h2>Forensic Evaluation</h2>
+                <div class="image-showcase">
+                    <div class="image-box">
+                        <h3 style="color: #8b949e; font-size: 16px;">Original Upload</h3>
+                        <img src="/uploads/fake_0.jpg" alt="Original Image">
+                    </div>
+                    <div class="image-box">
+                        <h3 style="color: #8b949e; font-size: 16px;">Error Level Analysis (ELA)</h3>
+                        
+                        <img src="/static/ela_fake_0.jpg" alt="ELA Visual Proof">
+                        <p style="font-size: 12px; color: #8b949e; margin-top: 10px;">Highlights high-compression
+                            discrepancies common in manipulated face splices.</p>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: Data & Metadata Analysis -->
+            <div class="card-column" style="display: flex; flex-direction: column; gap: 20px;">
+
+                <div class="card result-card"
+                    style="--accent: #f85149; --accent-glow: rgba(248, 81, 73, 0.4);">
+                    <h2>AI Inference Result</h2>
+                    <h1 class="result fake" style="margin: 0;">Fake</h1>
+
+                    <div class="confidence-circle">
+                        88.2%
+                    </div>
+                    <p style="color: #8b949e; font-size: 14px;">Confidence Threshold Verification</p>
+                </div>
+
+                <div class="card" style="flex: 1;">
+                    <h2>Media Metadata Map</h2>
+                    
+                    <table class="metadata-table">
+                        <tbody>
+                            
+                            <tr>
+                                <th>File Size</th>
+                                <td>8.99 KB</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Info</th>
+                                <td>No EXIF metadata found. (Often stripped from social media/manipulated images)</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    
+                </div>
+
+            </div>
+
+            <!-- Column 3: Detailed Breakdown (Full Width) -->
+            
+            <div class="breakdown-section">
+                <div class="breakdown-header">
+                    <h2>Detailed Breakdown</h2>
+                </div>
+
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Eye Reflections</h3>
+                        <div class="breakdown-score fake">95%</div>
+                    </div>
+                    <p class="breakdown-text">The eyes lack natural reflections or exhibit inconsistent catchlights, strongly suggesting artificial generation or manipulation.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Text in Background</h3>
+                        <div class="breakdown-score fake">95%</div>
+                    </div>
+                    <p class="breakdown-text">Background text appears scrambled, nonsensical, or unreadable, a common artifact in AI-generated imagery.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Facial Symmetry</h3>
+                        <div class="breakdown-score fake">88%</div>
+                    </div>
+                    <p class="breakdown-text">The face displays unnatural perfect symmetry or strange structural misalignments typical of GANs.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Skin Texture</h3>
+                        <div class="breakdown-score fake">87%</div>
+                    </div>
+                    <p class="breakdown-text">The skin appears overly smooth, plastic-like, or lacks the high-frequency pores of a real photograph.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Hair Details</h3>
+                        <div class="breakdown-score fake">91%</div>
+                    </div>
+                    <p class="breakdown-text">Hair strands blend together unnaturally or melt into the background, lacking individual strand clarity.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Lighting and Shadows</h3>
+                        <div class="breakdown-score fake">95%</div>
+                    </div>
+                    <p class="breakdown-text">Shadows do not align correctly with the assumed light sources in the environment.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Background Coherence</h3>
+                        <div class="breakdown-score fake">95%</div>
+                    </div>
+                    <p class="breakdown-text">Background elements morph into one another or lack physical logic.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Overall Image Quality</h3>
+                        <div class="breakdown-score fake">95%</div>
+                    </div>
+                    <p class="breakdown-text">The image exhibits strange compression artifacts or an unnatural &#39;painted&#39; aesthetic upon close inspection.</p>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-card-header">
+                        <h3 class="breakdown-card-title">Hairline Details</h3>
+                        <div class="breakdown-score fake">85%</div>
+                    </div>
+                    <p class="breakdown-text">The transition between the forehead and hair appears blended or artificially drawn in.</p>
+                </div>
+                
+            </div>
+            
+
+        </div>
+        
+
+    </div>
+</body>
+
+</html>

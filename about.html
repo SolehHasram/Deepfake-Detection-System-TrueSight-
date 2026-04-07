@@ -1,0 +1,313 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About TrueSight</title>
+    <style>
+        :root {
+            --primary-teal: #008080;
+            --secondary-teal: #006666;
+            --background-gray: #f7f7f7;
+            --white: #ffffff;
+            --text-color: #333;
+            --footer-color: #666;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .about-wrapper {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 50px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #008080;
+            font-size: 38px;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #4a4a4a;
+            text-align: justify;
+        }
+
+        .features {
+            margin: 40px 0;
+            background: #fdfdfd;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .features h2 {
+            font-size: 26px;
+            color: #006666;
+            margin-bottom: 25px;
+            text-align: left;
+            border-bottom: 2px solid #008080;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features ul li {
+            font-size: 17px;
+            margin-bottom: 18px;
+            position: relative;
+            padding-left: 30px;
+            color: #444;
+        }
+
+        .features ul li::before {
+            content: "✓";
+            color: #008080;
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 18px;
+            color: #008080;
+            font-weight: 600;
+            margin-top: 40px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #ffffff;
+            background-color: #008080;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: #006666;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+
+<style>
+/* Global Navbar Sticky & Font */
+body { font-family: 'Inter', sans-serif !important; }
+.navbar, .header { 
+    position: fixed !important; 
+    top: 0 !important; 
+    left: 0 !important;
+    width: 100vw !important;
+    box-sizing: border-box !important;
+    z-index: 1000 !important; 
+}
+/* Navbar Link Animation */
+.navbar a:not(.logo), .nav-links a, .header a:not(.logo), .navbar span a {
+    position: relative;
+    text-decoration: none;
+    padding-bottom: 5px;
+    color: #008080 !important;
+    margin-left: 15px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+}
+.navbar a:not(.logo)::after, .nav-links a::after, .header a:not(.logo)::after, .navbar span a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    bottom: 0;
+    right: 0;
+    background: #008080;
+    transition: width 0.3s ease;
+}
+.navbar a:not(.logo):hover::after, .nav-links a:hover::after, .header a:not(.logo):hover::after, .navbar span a:hover::after {
+    width: 100%;
+    left: 0;
+}
+</style>
+</head>
+
+<body style="padding-top: 80px;">
+
+    <nav class="navbar" style="padding: 15px 50px; background-color: #ffffff; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; box-sizing: border-box; z-index: 1000;">
+        <a href="/" class="logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #008080; font-size: 24px; font-weight: bold;">
+            <img src="/static/logo.png" alt="TrueSight Logo" style="height: 42px; width: auto; transform: scale(1.1);">
+            TrueSight
+        </a>
+        <div class="nav-links" style="display: flex; align-items: center; gap: 5px;">
+            <a href="/">Home</a>
+            {% if session.get('user_id') or session.get('username') or session.get('user') or logged_in %}
+            <a href="/detect">Scan Media</a>
+            <a href="/research">AI Research</a>
+            <a href="/history">History</a>
+            <a href="/profile">Profile</a>
+            <a href="/faqs">FAQs</a>
+            <a href="/about">About</a>
+            <a href="javascript:void(0)" onclick="showLogoutModal();" style="color: #e74c3c; font-weight: bold; margin-left: 15px;">Logout</a>
+            {% else %}
+            <a href="/research">AI Research</a>
+            <a href="/faqs">FAQs</a>
+            <a href="/about">About</a>
+            <a href="/login" style="margin-left: 15px;">Login</a>
+            <a href="/signup" style="color: #008080; font-weight: bold;">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="about-wrapper">
+        <h1>About TrueSight</h1>
+        <p>
+            Welcome to <strong>TrueSight</strong>, a premier deepfake detection platform crafted to empower individuals and organizations against malicious digital manipulation. In today's digital era where generative AI and face-swapping capabilities are increasingly weaponized, verifying media authenticity has never been more critical. TrueSight answers this challenge through pioneering, multi-layered algorithmic verification.
+        </p>
+        
+        <div class="features">
+            <h2>Our Technical Edge</h2>
+            <ul>
+                <li><strong>Multi-Model Ensemble Engine:</strong> A comprehensive scanner analyzing media integrity, concluding with an aggregated Master Confidence Score.</li>
+                <li><strong>Error Level Analysis (ELA) Core:</strong> Deep digital forensic dissection that highlights visually imperceptible pixel tampering and mismatched compression artifacts.</li>
+                <li><strong>"TrueSight AI" Research Assistant:</strong> A built-in AI research assistant powered by GPT-4o that fetches the latest deepfake-related news from Google News and provides accurate, up-to-date answers with real article links for reference.</li>
+            </ul>
+        </div>
+
+        <p>
+            TrueSight goes beyond simply labeling a video "fake or real." We break down the technical justifications—providing you with clear, color-coded interactive dashboards so you understand <em>why</em> the media was flagged. From audio mismatches to unnatural digital artifact blurs, our goal is to restore confidence in global media authenticity.
+        </p>
+
+        <div class="footer-text">
+            Truth is not just seen. It is verified.
+        </div>
+
+        <div class="text-center">
+            <a href="/" class="back-link">Back to Homepage</a>
+        </div>
+    </div>
+
+<!-- Custom Logout Modal -->
+<style>
+.logout-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    backdrop-filter: blur(2px);
+}
+.logout-modal-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    font-family: 'Inter', sans-serif;
+    transform: scale(0.95);
+    animation: scaleUp 0.2s ease forwards;
+}
+@keyframes scaleUp {
+    to { transform: scale(1); }
+}
+.logout-modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 12px;
+}
+.logout-modal-text {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+.logout-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.logout-btn-cancel {
+    padding: 12px 24px;
+    border: none;
+    background: #f1f3f5;
+    color: #495057;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.logout-btn-cancel:hover {
+    background: #e2e6ea;
+}
+.logout-btn-confirm {
+    padding: 12px 24px;
+    border: none;
+    background: #e74c3c;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+.logout-btn-confirm:hover {
+    background: #c0392b;
+    color: white;
+}
+</style>
+
+<div class="logout-modal-overlay" id="logoutModal">
+    <div class="logout-modal-box">
+        <div class="logout-modal-title">Sign Out</div>
+        <div class="logout-modal-text">Are you sure you want to log out of your account? You will need to sign in again to access your dashboard.</div>
+        <div class="logout-modal-buttons">
+            <button class="logout-btn-cancel" onclick="hideLogoutModal()">No, Cancel</button>
+            <a href="/logout" class="logout-btn-confirm">Yes, Log Out</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function showLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'flex';
+}
+function hideLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'none';
+}
+</script>
+</body>
+
+</html>
