@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #008080;
+            --secondary-color: #f7f7f7;
+            --text-color: #333;
+            --white: #ffffff;
+            --input-border: #ccc;
+            --success-bg: #d4edda;
+            --success-border: #c3e6cb;
+            --error-bg: #f8d7da;
+            --error-border: #f5c6cb;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            /* Ensure the correct font is loaded */
+            background-color: var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--white);
+            padding: 30px;
+            /* Increased padding for better spacing */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            /* Enhanced shadow */
+            text-align: center;
+            max-width: 400px;
+            /* Adjusted width */
+            width: 90%;
+            margin: 20px auto;
+            /* Ensure centered container */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            /* Increased font size for better visibility */
+            color: var(--primary-color);
+            font-weight: 600;
+            /* Bold title for prominence */
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: var(--success-bg);
+            border: 1px solid var(--success-border);
+        }
+
+        .alert-error {
+            color: #721c24;
+            background-color: var(--error-bg);
+            border: 1px solid var(--error-border);
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            /* Increased padding for a larger input box */
+            margin-bottom: 10px;
+            /* Better spacing between fields */
+            border: 1px solid var(--input-border);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            width: 90%;
+            padding: 12px;
+            /* Increased button size */
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            /* Larger text */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #006666;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .g-recaptcha {
+            margin: 20px 0;
+        }
+    </style>
+
+
+<style>
+/* Global Navbar Sticky & Font */
+body { font-family: 'Inter', sans-serif !important; }
+.navbar, .header { 
+    position: fixed !important; 
+    top: 0 !important; 
+    left: 0 !important;
+    width: 100vw !important;
+    box-sizing: border-box !important;
+    z-index: 1000 !important; 
+}
+/* Navbar Link Animation */
+.navbar a:not(.logo), .nav-links a, .header a:not(.logo), .navbar span a {
+    position: relative;
+    text-decoration: none;
+    padding-bottom: 5px;
+    color: #008080 !important;
+    margin-left: 15px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+}
+.navbar a:not(.logo)::after, .nav-links a::after, .header a:not(.logo)::after, .navbar span a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    bottom: 0;
+    right: 0;
+    background: #008080;
+    transition: width 0.3s ease;
+}
+.navbar a:not(.logo):hover::after, .nav-links a:hover::after, .header a:not(.logo):hover::after, .navbar span a:hover::after {
+    width: 100%;
+    left: 0;
+}
+</style>
+</head>
+
+
+<body>
+
+    <div class="container">
+        <h1>Sign Up</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <label for="security_question">Security Question:</label>
+            <select id="security_question" name="security_question" required>
+                <option value="What is your mother's last name?">What is your mother's last name?</option>
+                <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                <option value="What is the name of your hometown?">What is the name of your hometown?</option>
+            </select>
+
+            <label for="security_answer">Answer:</label>
+            <input type="text" id="security_answer" name="security_answer" required>
+            <div class="g-recaptcha" data-sitekey="6Ld2_YMqAAAAANwLWF6QnnMNtf3Ep8xZ4yr-DM81"></div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    </div>
+</body>
+
+</html>
